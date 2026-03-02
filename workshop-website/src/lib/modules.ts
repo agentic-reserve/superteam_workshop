@@ -139,6 +139,16 @@ export const modules: Module[] = [
     icon: 'slideshow',
     topics: ['Legibility', 'Simplicity', 'Obviousness', 'Demo Day', 'Investor Pitches'],
     folderPath: '13-pitch-deck-design'
+  },
+  {
+    id: '14',
+    title: 'Helius APIs & Infrastructure',
+    description: 'Complete Solana developer platform: RPCs, DAS API, webhooks, dan streaming',
+    duration: '2 jam',
+    level: 'Intermediate',
+    icon: 'cloud',
+    topics: ['RPC Nodes', 'DAS API', 'Webhooks', 'Priority Fees', 'Helius Sender', 'LaserStream'],
+    folderPath: '14-helius-apis'
   }
 ];
 
