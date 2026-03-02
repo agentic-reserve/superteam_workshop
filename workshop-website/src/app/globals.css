@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-dark-bg text-dark-text;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-dark-bg px-6 py-3 rounded-lg font-semibold hover:bg-primary-light hover:shadow-lg transition-all hover:-translate-y-0.5;
+  }
+  
+  .btn-secondary {
+    @apply bg-dark-card text-dark-text px-6 py-3 rounded-lg font-semibold border-2 border-primary hover:bg-primary/10 transition-all;
+  }
+  
+  .card {
+    @apply bg-dark-card rounded-xl shadow-lg p-6 hover:shadow-xl transition-all border border-dark-lighter;
+  }
+  
+  .module-card {
+    @apply bg-dark-card rounded-xl shadow-md p-6 border-l-4 hover:shadow-lg transition-all;
+  }
+  
+  .prose-custom {
+    @apply prose prose-lg max-w-none prose-headings:text-dark-text prose-p:text-gray-300 prose-a:text-primary prose-code:text-primary prose-pre:bg-dark-bg prose-pre:text-dark-text;
+  }
+  
+  .material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+  }
+  
+  .material-symbols-filled {
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+  }
+}
+
+/* Prose styling for markdown content */
+.prose-primary {
+  @apply text-gray-300;
+}
+
+.prose-primary h1,
+.prose-primary h2,
+.prose-primary h3,
+.prose-primary h4,
+.prose-primary h5,
+.prose-primary h6 {
+  @apply text-dark-text font-bold;
+}
+
+.prose-primary a {
+  @apply text-primary hover:text-primary-light;
+}
+
+.prose-primary code {
+  @apply bg-dark-bg text-primary px-2 py-1 rounded text-sm;
+}
+
+.prose-primary pre {
+  @apply bg-dark-bg p-4 rounded-lg overflow-x-auto;
+}
+
+.prose-primary pre code {
+  @apply bg-transparent p-0;
+}
+
+.prose-primary blockquote {
+  @apply border-l-4 border-primary pl-4 italic text-gray-400;
+}
+
+.prose-primary ul,
+.prose-primary ol {
+  @apply text-gray-300;
+}
+
+.prose-primary table {
+  @apply border-collapse w-full;
+}
+
+.prose-primary th {
+  @apply bg-dark-card border border-dark-lighter px-4 py-2 text-left;
+}
+
+.prose-primary td {
+  @apply border border-dark-lighter px-4 py-2;
+}
+
+/* Wallet Adapter Custom Styling */
+.wallet-adapter-button {
+  background-color: #50A0B4 !important;
+  color: #303841 !important;
+  border-radius: 0.5rem !important;
+  font-weight: 600 !important;
+  padding: 0.5rem 1rem !important;
+  transition: all 0.2s !important;
+  border: none !important;
+}
+
+.wallet-adapter-button:hover:not([disabled]) {
+  background-color: #6BB8CC !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(80, 160, 180, 0.4) !important;
+}
+
+.wallet-adapter-button[disabled] {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
+.wallet-adapter-modal-wrapper {
+  background-color: rgba(48, 56, 65, 0.95) !important;
+}
+
+.wallet-adapter-modal {
+  background-color: #3A4750 !important;
+  border: 1px solid #4A5760 !important;
+  border-radius: 1rem !important;
+}
+
+.wallet-adapter-modal-title {
+  color: #EEEEEE !important;
+}
+
+.wallet-adapter-modal-list {
+  background-color: #3A4750 !important;
+}
+
+.wallet-adapter-modal-list-item {
+  background-color: #3A4750 !important;
+  border: 1px solid #4A5760 !important;
+  border-radius: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.wallet-adapter-modal-list-item:hover {
+  background-color: #4A5760 !important;
+  border-color: #50A0B4 !important;
+}
+
+.wallet-adapter-button-trigger {
+  background-color: #50A0B4 !important;
+  color: #303841 !important;
+}
+
+.wallet-adapter-dropdown {
+  background-color: #3A4750 !important;
+  border: 1px solid #4A5760 !important;
+  border-radius: 0.5rem !important;
+}
+
+.wallet-adapter-dropdown-list {
+  background-color: #3A4750 !important;
+}
+
+.wallet-adapter-dropdown-list-item {
+  color: #EEEEEE !important;
+}
+
+.wallet-adapter-dropdown-list-item:hover {
+  background-color: #4A5760 !important;
+}

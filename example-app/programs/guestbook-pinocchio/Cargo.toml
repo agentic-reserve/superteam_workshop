@@ -1,0 +1,24 @@
+[package]
+name = "guestbook-pinocchio"
+version = "0.1.0"
+description = "High-performance guestbook program using Pinocchio"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "guestbook_pinocchio"
+
+[features]
+default = []
+bpf-entrypoint = []
+
+[dependencies]
+pinocchio = "0.10"
+pinocchio-system = "0.4"
+bytemuck = { version = "1.14", features = ["derive"] }
+
+[profile.release]
+overflow-checks = true
+lto = "fat"
+codegen-units = 1
+opt-level = 3

@@ -1,0 +1,13 @@
+{
+  "name": "Build Anchor Program",
+  "version": "1.0.0",
+  "description": "Build Anchor program when Rust files are saved",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["programs/**/*.rs"]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "anchor build"
+  }
+}
