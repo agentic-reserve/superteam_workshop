@@ -189,6 +189,16 @@ export const modules: Module[] = [
     icon: 'pest_control',
     topics: ['Fuzzing', 'Property Testing', 'Stateful Testing', 'Security', 'CI/CD'],
     folderPath: '17-trident-fuzzing'
+  },
+  {
+    id: '18',
+    title: 'BlockchainSpider - On-Chain Data',
+    description: 'Crawl dan analyze on-chain data: transaction flows, money tracing, dan labeled addresses',
+    duration: '2 jam',
+    level: 'Intermediate',
+    icon: 'travel_explore',
+    topics: ['Data Collection', 'Forensics', 'Graph Analysis', 'Python', 'Scrapy'],
+    folderPath: '18-blockchain-spider'
   }
 ];
 
