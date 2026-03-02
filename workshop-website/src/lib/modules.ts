@@ -102,13 +102,13 @@ export const modules: Module[] = [
   },
   {
     id: '10',
-    title: 'OpenClaw Integration',
-    description: 'Multi-platform notifications dan team collaboration',
-    duration: '1 jam',
+    title: 'MagicBlock Ephemeral Rollups',
+    description: 'High-performance Solana dengan sub-10ms latency dan gasless transactions',
+    duration: '2 jam',
     level: 'Advanced',
-    icon: 'notifications_active',
-    topics: ['Slack/Discord/Telegram', 'Automation', 'Team Workflows', 'Ollama Setup'],
-    folderPath: '09-openclaw-integration'
+    icon: 'flash_on',
+    topics: ['Ephemeral Rollups', 'Delegation', 'VRF', 'Crank', 'Real-time Games'],
+    folderPath: '10-magicblock'
   },
   {
     id: '11',
