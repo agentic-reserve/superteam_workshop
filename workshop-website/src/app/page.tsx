@@ -92,22 +92,22 @@ export default function Home() {
             <AnimatedSection animation="scale" delay={200}>
               <div className="flex flex-col items-center">
                 <MaterialIcon icon="library_books" size={40} className="text-primary mb-2" />
-                <div className="text-4xl font-bold text-primary mb-2">12</div>
+                <div className="text-4xl font-bold text-primary mb-2">15</div>
                 <div className="text-gray-400">Comprehensive Modules</div>
               </div>
             </AnimatedSection>
             <AnimatedSection animation="scale" delay={300}>
               <div className="flex flex-col items-center">
                 <MaterialIcon icon="schedule" size={40} className="text-primary mb-2" />
-                <div className="text-4xl font-bold text-primary mb-2">7h</div>
+                <div className="text-4xl font-bold text-primary mb-2">20h</div>
                 <div className="text-gray-400">Total Learning Time</div>
               </div>
             </AnimatedSection>
             <AnimatedSection animation="scale" delay={400}>
               <div className="flex flex-col items-center">
-                <MaterialIcon icon="trending_down" size={40} className="text-primary mb-2" />
-                <div className="text-4xl font-bold text-primary mb-2">95%</div>
-                <div className="text-gray-400">CU Reduction</div>
+                <MaterialIcon icon="code" size={40} className="text-primary mb-2" />
+                <div className="text-4xl font-bold text-primary mb-2">100+</div>
+                <div className="text-gray-400">Code Examples</div>
               </div>
             </AnimatedSection>
           </div>
