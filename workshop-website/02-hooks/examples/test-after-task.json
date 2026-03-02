@@ -1,0 +1,12 @@
+{
+  "name": "Test After Task Completion",
+  "version": "1.0.0",
+  "description": "Run tests automatically after completing a spec task",
+  "when": {
+    "type": "postTaskExecution"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "npm test"
+  }
+}

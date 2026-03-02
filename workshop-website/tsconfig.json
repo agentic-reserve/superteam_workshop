@@ -22,5 +22,19 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "01-skills-solana",
+    "02-hooks",
+    "02-specs-solana",
+    "02-workflow-optimization",
+    "03-steering",
+    "04-mcp",
+    "06-complete-setup",
+    "07-modern-workflow",
+    "08-deployment",
+    "09-openclaw-integration",
+    "11-sipher-privacy",
+    "12-openrouter-agents"
+  ]
 }

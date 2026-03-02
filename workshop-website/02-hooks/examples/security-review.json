@@ -1,0 +1,13 @@
+{
+  "name": "Security Review Before Write",
+  "version": "1.0.0",
+  "description": "Review Solana program code for security issues before writing",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": ["write"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Review this Solana code for security: 1) Signer verification 2) Account ownership 3) Integer overflow 4) Reentrancy 5) PDA validation"
+  }
+}

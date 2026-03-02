@@ -1,0 +1,13 @@
+{
+  "name": "Review Write Operations",
+  "version": "1.0.0",
+  "description": "Ask agent to review before writing to files",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": ["write"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Verify this write operation follows our coding standards and won't break existing functionality"
+  }
+}

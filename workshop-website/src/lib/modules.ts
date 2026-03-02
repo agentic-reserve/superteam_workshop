@@ -138,5 +138,5 @@ export function getModuleById(id: string): Module | undefined {
 
 export function getModulePath(id: string): string {
   const module = getModuleById(id);
-  return module ? `../../${module.folderPath}` : '';
+  return module ? `../${module.folderPath}` : '';
 }

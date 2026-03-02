@@ -1,0 +1,13 @@
+{
+  "name": "Test Anchor Program",
+  "version": "1.0.0",
+  "description": "Automatically run Anchor tests when program files are saved",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["programs/**/*.rs"]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "anchor test"
+  }
+}
