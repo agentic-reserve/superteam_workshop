@@ -487,6 +487,22 @@ app.post("/webhook", (req, res) => {
 - Enhanced transaction: 100 credits
 - Webhook delivery: 1 credit
 
+## Advanced Topics
+
+### Indexing Solana Data
+
+Untuk production applications yang butuh query historical data dengan cepat, kamu perlu build custom indexes. Pelajari cara backfill, stream, dan maintain Solana indexes:
+
+📖 **[Complete Indexing Guide](./indexing-guide.md)** - Build production-ready Solana indexes dengan Helius
+
+Topics covered:
+- Why index Solana data (wallet, trading, PnL examples)
+- Three methods untuk get historical data
+- Database storage (PostgreSQL, ClickHouse)
+- Real-time streaming dengan LaserStream
+- Complete working examples
+- Best practices untuk performance dan reliability
+
 ## Resources
 
 - **Dashboard**: https://dashboard.helius.dev
