@@ -7,6 +7,7 @@ import InteractiveCard from '@/components/InteractiveCard';
 import ScrollProgress from '@/components/ScrollProgress';
 import WalletDemo from '@/components/WalletDemo';
 import ColorBends from '@/components/ColorBends';
+import DecryptedText from '@/components/DecryptedText';
 
 export default function Home() {
   return (
@@ -42,7 +43,15 @@ export default function Home() {
                 </div>
               </div>
               <h1 className="text-5xl md:text-6xl font-bold mb-6">
-                Optimizing Solana Fullstack Development
+                <DecryptedText
+                  text="Optimizing Solana Fullstack Development"
+                  animateOn="view"
+                  sequential
+                  speed={30}
+                  revealDirection="center"
+                  className="text-primary"
+                  encryptedClassName="text-gray-500"
+                />
               </h1>
               <p className="text-xl md:text-2xl mb-8 text-gray-300">
                 Build Solana dApps 10x faster with AI-powered tools
