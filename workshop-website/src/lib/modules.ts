@@ -129,6 +129,16 @@ export const modules: Module[] = [
     icon: 'smart_toy',
     topics: ['OpenRouter SDK', 'Items Streaming', 'Multi-Modal Embeddings', 'Agent Hooks', 'Model Discovery'],
     folderPath: '12-openrouter-agents'
+  },
+  {
+    id: '13',
+    title: 'Pitch Deck Design',
+    description: 'Cara membuat pitch deck yang memorable untuk Solana projects',
+    duration: '1 jam',
+    level: 'Beginner',
+    icon: 'slideshow',
+    topics: ['Legibility', 'Simplicity', 'Obviousness', 'Demo Day', 'Investor Pitches'],
+    folderPath: '13-pitch-deck-design'
   }
 ];
 
