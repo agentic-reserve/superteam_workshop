@@ -18,15 +18,24 @@ async function getModuleContent(id: string) {
   const module = getModuleById(id);
   if (!module) return null;
 
-  const readmePath = path.join(process.cwd(), '..', module.folderPath, 'README.md');
+  // Try both paths: inside workshop-website and parent directory
+  const paths = [
+    path.join(process.cwd(), module.folderPath, 'README.md'),
+    path.join(process.cwd(), '..', module.folderPath, 'README.md'),
+  ];
   
-  try {
-    const content = fs.readFileSync(readmePath, 'utf8');
-    return { module, content };
-  } catch (error) {
-    console.error(`Error reading ${readmePath}:`, error);
-    return { module, content: '# Content not available\n\nModule content is being prepared.' };
+  for (const readmePath of paths) {
+    try {
+      const content = fs.readFileSync(readmePath, 'utf8');
+      return { module, content };
+    } catch (error) {
+      // Try next path
+      continue;
+    }
   }
+  
+  console.error(`Error reading module ${id} from any path`);
+  return { module, content: '# Content not available\n\nModule content is being prepared.' };
 }
 
 export default async function ModulePage({ params }: { params: { id: string } }) {
