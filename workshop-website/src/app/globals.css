@@ -6,27 +6,39 @@
   body {
     @apply bg-dark-bg text-dark-text;
   }
+  
+  /* Ensure smooth scrolling on all devices */
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Prevent horizontal scroll on mobile */
+  body {
+    overflow-x: hidden;
+  }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-primary text-dark-bg px-6 py-3 rounded-lg font-semibold hover:bg-primary-light hover:shadow-lg transition-all hover:-translate-y-0.5;
+    @apply bg-primary text-dark-bg px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold hover:bg-primary-light hover:shadow-lg transition-all hover:-translate-y-0.5 text-sm sm:text-base;
   }
   
   .btn-secondary {
-    @apply bg-dark-card text-dark-text px-6 py-3 rounded-lg font-semibold border-2 border-primary hover:bg-primary/10 transition-all;
+    @apply bg-dark-card text-dark-text px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold border-2 border-primary hover:bg-primary/10 transition-all text-sm sm:text-base;
   }
   
   .card {
-    @apply bg-dark-card rounded-xl shadow-lg p-6 hover:shadow-xl transition-all border border-dark-lighter;
+    @apply bg-dark-card rounded-xl shadow-lg p-4 sm:p-6 hover:shadow-xl transition-all border border-dark-lighter;
   }
   
   .module-card {
-    @apply bg-dark-card rounded-xl shadow-md p-6 border-l-4 hover:shadow-lg transition-all;
+    @apply bg-dark-card rounded-xl shadow-md p-4 sm:p-6 border-l-4 hover:shadow-lg transition-all;
   }
   
   .prose-custom {
-    @apply prose prose-lg max-w-none prose-headings:text-dark-text prose-p:text-gray-300 prose-a:text-primary prose-code:text-primary prose-pre:bg-dark-bg prose-pre:text-dark-text;
+    @apply prose prose-sm sm:prose-base lg:prose-lg max-w-none prose-headings:text-dark-text prose-p:text-gray-300 prose-a:text-primary prose-code:text-primary prose-pre:bg-dark-bg prose-pre:text-dark-text;
   }
   
   .material-symbols-outlined {
@@ -44,32 +56,46 @@
     'GRAD' 0,
     'opsz' 24;
   }
+  
+  /* Container with responsive padding */
+  .container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
 }
 
-/* Prose styling for markdown content */
+/* Prose styling for markdown content - Responsive */
 .prose-primary {
-  @apply text-gray-300;
+  @apply text-gray-300 text-sm sm:text-base;
 }
 
-.prose-primary h1,
-.prose-primary h2,
-.prose-primary h3,
+.prose-primary h1 {
+  @apply text-dark-text font-bold text-2xl sm:text-3xl lg:text-4xl mt-6 mb-4;
+}
+
+.prose-primary h2 {
+  @apply text-dark-text font-bold text-xl sm:text-2xl lg:text-3xl mt-5 mb-3;
+}
+
+.prose-primary h3 {
+  @apply text-dark-text font-bold text-lg sm:text-xl lg:text-2xl mt-4 mb-2;
+}
+
 .prose-primary h4,
 .prose-primary h5,
 .prose-primary h6 {
-  @apply text-dark-text font-bold;
+  @apply text-dark-text font-bold text-base sm:text-lg mt-3 mb-2;
 }
 
 .prose-primary a {
-  @apply text-primary hover:text-primary-light;
+  @apply text-primary hover:text-primary-light break-words;
 }
 
 .prose-primary code {
-  @apply bg-dark-bg text-primary px-2 py-1 rounded text-sm;
+  @apply bg-dark-bg text-primary px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-xs sm:text-sm break-words;
 }
 
 .prose-primary pre {
-  @apply bg-dark-bg p-4 rounded-lg overflow-x-auto;
+  @apply bg-dark-bg p-3 sm:p-4 rounded-lg overflow-x-auto text-xs sm:text-sm;
 }
 
 .prose-primary pre code {
@@ -77,35 +103,84 @@
 }
 
 .prose-primary blockquote {
-  @apply border-l-4 border-primary pl-4 italic text-gray-400;
+  @apply border-l-4 border-primary pl-3 sm:pl-4 italic text-gray-400 my-3 sm:my-4;
 }
 
 .prose-primary ul,
 .prose-primary ol {
-  @apply text-gray-300;
+  @apply text-gray-300 pl-4 sm:pl-6;
+}
+
+.prose-primary li {
+  @apply mb-1 sm:mb-2;
 }
 
 .prose-primary table {
-  @apply border-collapse w-full;
+  @apply border-collapse w-full text-xs sm:text-sm overflow-x-auto block sm:table;
 }
 
 .prose-primary th {
-  @apply bg-dark-card border border-dark-lighter px-4 py-2 text-left;
+  @apply bg-dark-card border border-dark-lighter px-2 sm:px-4 py-1 sm:py-2 text-left;
 }
 
 .prose-primary td {
-  @apply border border-dark-lighter px-4 py-2;
+  @apply border border-dark-lighter px-2 sm:px-4 py-1 sm:py-2;
 }
 
-/* Wallet Adapter Custom Styling */
+.prose-primary img {
+  @apply max-w-full h-auto rounded-lg;
+}
+
+/* Responsive text sizes */
+.text-responsive-xs {
+  @apply text-xs sm:text-sm;
+}
+
+.text-responsive-sm {
+  @apply text-sm sm:text-base;
+}
+
+.text-responsive-base {
+  @apply text-base sm:text-lg;
+}
+
+.text-responsive-lg {
+  @apply text-lg sm:text-xl lg:text-2xl;
+}
+
+.text-responsive-xl {
+  @apply text-xl sm:text-2xl lg:text-3xl;
+}
+
+.text-responsive-2xl {
+  @apply text-2xl sm:text-3xl lg:text-4xl;
+}
+
+.text-responsive-3xl {
+  @apply text-3xl sm:text-4xl lg:text-5xl;
+}
+
+.text-responsive-4xl {
+  @apply text-4xl sm:text-5xl lg:text-6xl;
+}
+
+/* Wallet Adapter Custom Styling - Responsive */
 .wallet-adapter-button {
   background-color: #50A0B4 !important;
   color: #303841 !important;
   border-radius: 0.5rem !important;
   font-weight: 600 !important;
-  padding: 0.5rem 1rem !important;
+  padding: 0.5rem 0.75rem !important;
   transition: all 0.2s !important;
   border: none !important;
+  font-size: 0.875rem !important;
+}
+
+@media (min-width: 640px) {
+  .wallet-adapter-button {
+    padding: 0.5rem 1rem !important;
+    font-size: 1rem !important;
+  }
 }
 
 .wallet-adapter-button:hover:not([disabled]) {
@@ -121,16 +196,33 @@
 
 .wallet-adapter-modal-wrapper {
   background-color: rgba(48, 56, 65, 0.95) !important;
+  padding: 1rem !important;
 }
 
 .wallet-adapter-modal {
   background-color: #3A4750 !important;
   border: 1px solid #4A5760 !important;
   border-radius: 1rem !important;
+  max-width: 90vw !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+}
+
+@media (min-width: 640px) {
+  .wallet-adapter-modal {
+    max-width: 400px !important;
+  }
 }
 
 .wallet-adapter-modal-title {
   color: #EEEEEE !important;
+  font-size: 1.25rem !important;
+}
+
+@media (min-width: 640px) {
+  .wallet-adapter-modal-title {
+    font-size: 1.5rem !important;
+  }
 }
 
 .wallet-adapter-modal-list {
@@ -142,6 +234,13 @@
   border: 1px solid #4A5760 !important;
   border-radius: 0.5rem !important;
   margin-bottom: 0.5rem !important;
+  padding: 0.75rem !important;
+}
+
+@media (min-width: 640px) {
+  .wallet-adapter-modal-list-item {
+    padding: 1rem !important;
+  }
 }
 
 .wallet-adapter-modal-list-item:hover {
@@ -158,6 +257,13 @@
   background-color: #3A4750 !important;
   border: 1px solid #4A5760 !important;
   border-radius: 0.5rem !important;
+  max-width: 90vw !important;
+}
+
+@media (min-width: 640px) {
+  .wallet-adapter-dropdown {
+    max-width: 300px !important;
+  }
 }
 
 .wallet-adapter-dropdown-list {
@@ -166,8 +272,78 @@
 
 .wallet-adapter-dropdown-list-item {
   color: #EEEEEE !important;
+  padding: 0.75rem !important;
+  font-size: 0.875rem !important;
+}
+
+@media (min-width: 640px) {
+  .wallet-adapter-dropdown-list-item {
+    padding: 1rem !important;
+    font-size: 1rem !important;
+  }
 }
 
 .wallet-adapter-dropdown-list-item:hover {
   background-color: #4A5760 !important;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 639px) {
+  /* Reduce padding on mobile */
+  .py-20 {
+    @apply py-12;
+  }
+  
+  .py-16 {
+    @apply py-10;
+  }
+  
+  /* Smaller gaps on mobile */
+  .gap-8 {
+    @apply gap-4;
+  }
+  
+  /* Stack items on mobile */
+  .grid-cols-2 {
+    @apply grid-cols-1;
+  }
+  
+  /* Ensure touch targets are large enough (44x44px minimum) */
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Tablet improvements */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .container {
+    @apply px-6;
+  }
+}
+
+/* Prevent text overflow */
+* {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Smooth transitions for responsive changes */
+* {
+  transition-property: padding, margin, font-size;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+}
+
+/* Ensure images are responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Fix for iOS Safari viewport height */
+@supports (-webkit-touch-callout: none) {
+  .min-h-screen {
+    min-height: -webkit-fill-available;
+  }
 }

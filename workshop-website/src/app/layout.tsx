@@ -13,6 +13,12 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Solana Workshop - Optimizing Fullstack Development dengan Kiro",
   description: "Learn to build Solana dApps 10x faster with AI-powered tools: Kiro, OpenClaw, and Ollama",
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
 };
 
 export default function RootLayout({
