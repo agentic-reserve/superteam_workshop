@@ -40,7 +40,23 @@ export default function Footer() {
           {/* Connect */}
           <div>
             <h3 className="text-dark-text font-bold text-lg mb-4">Connect</h3>
+            <ul className="space-y-3 text-sm mb-4">
+              <li>
+                <a 
+                  href="https://t.me/SuperteamId" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="flex items-center gap-2 hover:text-primary transition-colors group"
+                >
+                  <MaterialIcon icon="groups" size={20} className="text-primary" />
+                  <span>Join Superteam Indonesia</span>
+                </a>
+              </li>
+            </ul>
             <div className="flex space-x-4">
+              <a href="https://t.me/SuperteamId" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="Telegram">
+                <MaterialIcon icon="forum" size={24} />
+              </a>
               <a href="https://x.com/DaemonProtocol" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="Twitter/X">
                 <MaterialIcon icon="chat" size={24} />
               </a>

@@ -484,6 +484,47 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Community Section */}
+      <section className="py-20 bg-dark-card">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <AnimatedSection animation="slideUp">
+              <div className="card text-center">
+                <div className="flex justify-center mb-6">
+                  <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center">
+                    <MaterialIcon icon="groups" size={48} className="text-primary" />
+                  </div>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">Join Superteam Indonesia</h2>
+                <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+                  Bergabung dengan 900+ Solana builders di Indonesia. Share knowledge, collaborate on projects, dan grow together!
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <a 
+                    href="https://t.me/SuperteamId" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="btn-primary inline-flex items-center gap-3 text-lg px-8 py-4"
+                  >
+                    <MaterialIcon icon="forum" size={24} />
+                    Join Telegram Group
+                  </a>
+                  <div className="flex items-center gap-2 text-gray-400">
+                    <MaterialIcon icon="people" size={20} className="text-primary" />
+                    <span className="text-sm">933 members</span>
+                  </div>
+                </div>
+                <div className="mt-8 pt-8 border-t border-dark-lighter">
+                  <p className="text-sm text-gray-500">
+                    Group for Sharing and Discussion Solana Builders
+                  </p>
+                </div>
+              </div>
+            </AnimatedSection>
+          </div>
+        </div>
+      </section>
     </div>
     </>
   );
