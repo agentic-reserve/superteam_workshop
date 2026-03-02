@@ -149,6 +149,16 @@ export const modules: Module[] = [
     icon: 'cloud',
     topics: ['RPC Nodes', 'DAS API', 'Webhooks', 'Priority Fees', 'Helius Sender', 'LaserStream'],
     folderPath: '14-helius-apis'
+  },
+  {
+    id: '15',
+    title: 'Solana Mobile Development',
+    description: 'Build mobile dApps dengan Mobile Wallet Adapter dan publish ke dApp Store',
+    duration: '2.5 jam',
+    level: 'Intermediate',
+    icon: 'phone_android',
+    topics: ['Mobile Wallet Adapter', 'React Native', 'Kotlin', 'Flutter', 'dApp Store', 'PWA'],
+    folderPath: '15-solana-mobile'
   }
 ];
 
