@@ -15,7 +15,7 @@ export default function Home() {
       <ScrollProgress />
       <div>
       {/* Hero Section */}
-      <section className="bg-dark-bg text-dark-text py-20 relative overflow-hidden border-b border-dark-lighter">
+      <section className="bg-dark-bg text-dark-text py-32 pt-40 relative overflow-hidden border-b border-dark-lighter min-h-screen flex items-center">
         <ColorBends
           colors={["#ff5c7a", "#8a5cff", "#00ffd1"]}
           rotation={0}
