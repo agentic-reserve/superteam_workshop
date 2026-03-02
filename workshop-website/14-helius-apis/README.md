@@ -98,7 +98,51 @@ const response = await fetch(
 );
 ```
 
-### 2. Enhanced Transactions API
+### 2. getTransactionsForAddress (Helius Exclusive)
+
+Powerful transaction history queries dengan advanced filtering dan flexible sorting.
+
+```typescript
+const response = await fetch(
+  `https://mainnet.helius-rpc.com/?api-key=${API_KEY}`,
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      id: "1",
+      method: "getTransactionsForAddress",
+      params: [
+        WALLET_ADDRESS,
+        {
+          transactionDetails: "full",
+          sortOrder: "asc", // Chronological order
+          limit: 100,
+          filters: {
+            blockTime: {
+              gte: 1735689600, // Start time
+              lte: 1738368000, // End time
+            },
+            status: "succeeded",
+            tokenAccounts: "balanceChanged", // Include token accounts
+          },
+        },
+      ],
+    }),
+  }
+);
+```
+
+**Key Features:**
+- Get full transactions in one call (no need untuk getTransaction)
+- Include associated token accounts automatically
+- Sort chronologically atau reverse
+- Filter by time, status, slots
+- Efficient pagination
+
+📖 **[Complete getTransactionsForAddress Guide](./get-transactions-guide.md)**
+
+### 3. Enhanced Transactions API
 
 Parsed, human-readable transaction data dengan automatic labeling.
 
@@ -117,7 +161,7 @@ const transactions = await response.json();
 // - accountData: Involved accounts
 ```
 
-### 3. Priority Fee API
+### 4. Priority Fee API
 
 Optimal priority fee estimation untuk transaction landing.
 
@@ -154,7 +198,7 @@ transaction.add(
 );
 ```
 
-### 4. Webhooks
+### 5. Webhooks
 
 Real-time HTTP POST notifications untuk blockchain events.
 
@@ -196,7 +240,7 @@ app.post("/webhook", (req, res) => {
 });
 ```
 
-### 5. Helius Sender
+### 6. Helius Sender
 
 Ultra low latency transaction submission service.
 
@@ -218,7 +262,7 @@ const signature = await connection.sendTransaction(transaction, [payer], {
 });
 ```
 
-### 6. WebSockets (Enhanced)
+### 7. WebSockets (Enhanced)
 
 Real-time streaming dengan advanced filtering.
 
