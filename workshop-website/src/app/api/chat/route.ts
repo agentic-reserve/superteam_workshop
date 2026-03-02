@@ -22,6 +22,16 @@ Provide clear, concise, and practical answers. Include code examples when releva
 If asked about topics outside Solana development, politely redirect to Solana-related questions.`;
 
 export async function POST(req: NextRequest) {
+  // Disable Ollama in production (Vercel doesn't support it)
+  if (process.env.VERCEL) {
+    return NextResponse.json(
+      { 
+        error: 'AI Assistant memerlukan Ollama yang berjalan secara lokal. Fitur ini hanya tersedia saat development. Untuk production, gunakan fitur AI Security Audit yang menggunakan OpenRouter.' 
+      },
+      { status: 503 }
+    );
+  }
+
   try {
     const { message, history = [] } = await req.json();
 
