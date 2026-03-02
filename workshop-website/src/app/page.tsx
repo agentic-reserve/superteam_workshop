@@ -35,13 +35,11 @@ export default function Home() {
           <AnimatedSection animation="fadeIn" duration={1000}>
             <div className="max-w-4xl mx-auto text-center">
               <div className="flex justify-center mb-6">
-                <div className="w-32 h-32 rounded-2xl flex items-center justify-center">
-                  <img 
-                    src="/Size=72, Color=white.png" 
-                    alt="Superteam Workshop Logo" 
-                    className="w-full h-full object-contain"
-                  />
-                </div>
+                <img 
+                  src="/Size=72, Color=white.png" 
+                  alt="Superteam Workshop Logo" 
+                  className="w-32 h-32 object-contain"
+                />
               </div>
               <h1 className="text-5xl md:text-6xl font-bold mb-6">
                 <DecryptedText

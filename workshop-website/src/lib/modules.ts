@@ -169,6 +169,16 @@ export const modules: Module[] = [
     icon: 'phone_android',
     topics: ['Mobile Wallet Adapter', 'React Native', 'Kotlin', 'Flutter', 'dApp Store', 'PWA'],
     folderPath: '15-solana-mobile'
+  },
+  {
+    id: '16',
+    title: 'Solana eBPF Decompilation',
+    description: 'Reverse engineering dan security analysis untuk Solana programs dengan Ghidra',
+    duration: '2 jam',
+    level: 'Advanced',
+    icon: 'bug_report',
+    topics: ['Ghidra', 'eBPF', 'Reverse Engineering', 'Security Audit', 'Decompilation'],
+    folderPath: '16-ebpf-ghidra'
   }
 ];
 
