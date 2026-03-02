@@ -8,7 +8,6 @@ import ScrollProgress from '@/components/ScrollProgress';
 import WalletDemo from '@/components/WalletDemo';
 import ColorBends from '@/components/ColorBends';
 import DecryptedText from '@/components/DecryptedText';
-import MetallicPaint from '@/components/MetallicPaint';
 import GradualBlur from '@/components/GradualBlur';
 
 export default function Home() {
@@ -37,28 +36,10 @@ export default function Home() {
             <div className="max-w-4xl mx-auto text-center">
               <div className="flex justify-center mb-6">
                 <div className="w-32 h-32 rounded-2xl flex items-center justify-center">
-                  <MetallicPaint
-                    imageSrc="/Size=72, Color=white.png"
-                    seed={42}
-                    scale={4}
-                    patternSharpness={1}
-                    noiseScale={0.5}
-                    speed={0.3}
-                    liquid={0.75}
-                    mouseAnimation={true}
-                    brightness={2}
-                    contrast={0.5}
-                    refraction={0.01}
-                    blur={0.015}
-                    chromaticSpread={2}
-                    fresnel={1}
-                    angle={0}
-                    waveAmplitude={1}
-                    distortion={1}
-                    contour={0.2}
-                    lightColor="#50A0B4"
-                    darkColor="#000000"
-                    tintColor="#50A0B4"
+                  <img 
+                    src="/Size=72, Color=white.png" 
+                    alt="Superteam Workshop Logo" 
+                    className="w-full h-full object-contain"
                   />
                 </div>
               </div>
