@@ -199,6 +199,16 @@ export const modules: Module[] = [
     icon: 'travel_explore',
     topics: ['Data Collection', 'Forensics', 'Graph Analysis', 'Python', 'Scrapy'],
     folderPath: '18-blockchain-spider'
+  },
+  {
+    id: '19',
+    title: 'Winternitz Vault - Quantum Security',
+    description: 'Quantum-resistant lamports vault dengan Winternitz One-Time Signatures (WOTS)',
+    duration: '2.5 jam',
+    level: 'Advanced',
+    icon: 'lock',
+    topics: ['Quantum Resistance', 'WOTS', 'Hash-Based Crypto', 'PDA', 'Security'],
+    folderPath: '19-winternitz-vault'
   }
 ];
 

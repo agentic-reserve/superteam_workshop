@@ -100,7 +100,7 @@ export default function Home() {
             <AnimatedSection animation="scale" delay={200}>
               <div className="flex flex-col items-center">
                 <MaterialIcon icon="library_books" size={40} className="text-primary mb-2" />
-                <div className="text-4xl font-bold text-primary mb-2">18</div>
+                <div className="text-4xl font-bold text-primary mb-2">19</div>
                 <div className="text-gray-400">Comprehensive Modules</div>
               </div>
             </AnimatedSection>
