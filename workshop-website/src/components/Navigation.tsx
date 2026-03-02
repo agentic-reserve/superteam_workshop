@@ -1,7 +1,6 @@
 'use client';
 
 import BubbleMenu from './BubbleMenu';
-import Image from 'next/image';
 
 export default function Navigation() {
   const menuItems = [

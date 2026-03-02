@@ -31,7 +31,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <WalletProvider>
           <Navigation />
-          <main className="min-h-screen">
+          <main className="min-h-screen pt-24">
             {children}
           </main>
           <Footer />
