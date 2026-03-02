@@ -19,6 +19,28 @@ export const metadata: Metadata = {
     maximumScale: 5,
     userScalable: true,
   },
+  icons: {
+    icon: [
+      { url: '/Logo-White.png' },
+      { url: '/icon.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon.png' },
+    ],
+    shortcut: ['/favicon.ico'],
+  },
+  openGraph: {
+    title: 'Solana Workshop - Superteam Indonesia',
+    description: 'Learn to build Solana dApps 10x faster with AI-powered tools',
+    images: ['/Logo-White.png'],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Solana Workshop - Superteam Indonesia',
+    description: 'Learn to build Solana dApps 10x faster with AI-powered tools',
+    images: ['/Logo-White.png'],
+  },
 };
 
 export default function RootLayout({
@@ -33,6 +55,8 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
           rel="stylesheet"
         />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#50A0B4" />
       </head>
       <body className={inter.className}>
         <WalletProvider>

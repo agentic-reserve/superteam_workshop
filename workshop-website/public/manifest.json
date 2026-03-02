@@ -1,0 +1,23 @@
+{
+  "name": "Solana Workshop - Superteam Indonesia",
+  "short_name": "Solana Workshop",
+  "description": "Learn to build Solana dApps 10x faster with AI-powered tools: Kiro, OpenClaw, and Ollama",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#50A0B4",
+  "icons": [
+    {
+      "src": "/Logo-White.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/Logo-White.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
