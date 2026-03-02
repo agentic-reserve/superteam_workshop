@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import ollama from 'ollama';
 
 const SYSTEM_PROMPT = `You are a helpful Solana development assistant for a workshop about optimizing Solana fullstack development with Kiro, OpenClaw, and Ollama.
 
@@ -22,16 +21,6 @@ Provide clear, concise, and practical answers. Include code examples when releva
 If asked about topics outside Solana development, politely redirect to Solana-related questions.`;
 
 export async function POST(req: NextRequest) {
-  // Disable Ollama in production (Vercel doesn't support it)
-  if (process.env.VERCEL) {
-    return NextResponse.json(
-      { 
-        error: 'AI Assistant memerlukan Ollama yang berjalan secara lokal. Fitur ini hanya tersedia saat development. Untuk production, gunakan fitur AI Security Audit yang menggunakan OpenRouter.' 
-      },
-      { status: 503 }
-    );
-  }
-
   try {
     const { message, history = [] } = await req.json();
 
@@ -42,6 +31,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const apiKey = process.env.OPENROUTER_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: 'OpenRouter API key not configured' },
+        { status: 500 }
+      );
+    }
+
     // Build messages array with system prompt and history
     const messages = [
       { role: 'system', content: SYSTEM_PROMPT },
@@ -49,32 +46,49 @@ export async function POST(req: NextRequest) {
       { role: 'user', content: message }
     ];
 
-    // Call Ollama API
-    const response = await ollama.chat({
-      model: 'gpt-oss:120b-cloud',
-      messages: messages as any,
-      options: {
+    // Call OpenRouter API
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+        'X-Title': 'Superteam Workshop - Solana Development'
+      },
+      body: JSON.stringify({
+        model: 'anthropic/claude-3.5-sonnet',
+        messages: messages,
         temperature: 0.7,
-        top_p: 0.9,
-      }
+        max_tokens: 2000
+      })
     });
 
+    if (!response.ok) {
+      const error = await response.text();
+      console.error('OpenRouter API error:', error);
+      return NextResponse.json(
+        { error: 'Failed to get AI response' },
+        { status: response.status }
+      );
+    }
+
+    const data = await response.json();
+    const assistantMessage = data.choices[0]?.message?.content;
+
+    if (!assistantMessage) {
+      return NextResponse.json(
+        { error: 'No response from AI' },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json({
-      message: response.message.content,
+      message: assistantMessage,
       role: 'assistant'
     });
 
   } catch (error: any) {
     console.error('Chat API error:', error);
-    
-    // Handle specific Ollama errors
-    if (error.message?.includes('model')) {
-      return NextResponse.json(
-        { error: 'AI model not available. Please ensure Ollama is running with gpt-oss:120b-cloud model.' },
-        { status: 503 }
-      );
-    }
-
     return NextResponse.json(
       { error: 'Failed to process chat request' },
       { status: 500 }
