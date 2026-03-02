@@ -101,6 +101,16 @@ export const modules: Module[] = [
     folderPath: '08-deployment'
   },
   {
+    id: '09',
+    title: 'OpenClaw Integration',
+    description: 'Multi-platform AI agent untuk team collaboration dan automation',
+    duration: '2 jam',
+    level: 'Intermediate',
+    icon: 'hub',
+    topics: ['Multi-Platform', 'Webhooks', 'Automation', 'Team Collaboration', 'Ollama Integration'],
+    folderPath: '09-openclaw-integration'
+  },
+  {
     id: '10',
     title: 'MagicBlock Ephemeral Rollups',
     description: 'High-performance Solana dengan sub-10ms latency dan gasless transactions',
