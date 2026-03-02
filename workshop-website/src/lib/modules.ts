@@ -179,6 +179,16 @@ export const modules: Module[] = [
     icon: 'bug_report',
     topics: ['Ghidra', 'eBPF', 'Reverse Engineering', 'Security Audit', 'Decompilation'],
     folderPath: '16-ebpf-ghidra'
+  },
+  {
+    id: '17',
+    title: 'Trident Fuzzing Framework',
+    description: 'Manually-guided fuzzing untuk menemukan bugs dan vulnerabilities, processing 12,000 tx/s',
+    duration: '2.5 jam',
+    level: 'Advanced',
+    icon: 'pest_control',
+    topics: ['Fuzzing', 'Property Testing', 'Stateful Testing', 'Security', 'CI/CD'],
+    folderPath: '17-trident-fuzzing'
   }
 ];
 
