@@ -187,7 +187,7 @@ export default function AIAssistant() {
                 <h3 className="font-bold text-dark-bg">Solana AI Assistant</h3>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-dark-bg/60 rounded-full animate-pulse" />
-                  <p className="text-xs text-dark-bg/80">Powered by Ollama</p>
+                  <p className="text-xs text-dark-bg/80">Powered by daemonprotocol</p>
                 </div>
               </div>
             </div>
