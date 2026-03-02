@@ -53,11 +53,11 @@ export default function Home() {
                   encryptedClassName="text-gray-500"
                 />
               </h1>
-              <p className="text-xl md:text-2xl mb-8 text-gray-300">
-                Build Solana dApps 10x faster with AI-powered tools
+              <p className="text-xl md:text-2xl mb-4 text-gray-300">
+                Solana AI Assistant powered by daemonprotocol
               </p>
               <p className="text-lg mb-10 text-gray-400">
-                Master Kiro, OpenClaw, dan Ollama untuk mencapai flow state dan produktivitas maksimal
+                Build Solana dApps 10x faster dengan Kiro, OpenClaw, dan Ollama
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/modules" className="btn-primary inline-flex items-center justify-center gap-2">
