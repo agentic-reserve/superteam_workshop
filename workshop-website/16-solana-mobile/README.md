@@ -466,6 +466,347 @@ export function BalanceDisplay() {
 }
 ```
 
+## Seed Vault: Secure Key Storage
+
+### Overview
+
+**Seed Vault** adalah secure key storage system di Solana Mobile yang menyimpan private keys dengan hardware-backed security. Seed Vault provides a secure enclave untuk menyimpan seed phrases dan private keys, protected by device's hardware security module.
+
+### Key Features
+
+- 🔐 **Hardware-Backed Security** - Keys stored in secure hardware enclave
+- 🔑 **Biometric Authentication** - Fingerprint/face unlock untuk access keys
+- 🛡️ **Isolated Storage** - Keys never exposed to apps or OS
+- 📱 **Native Integration** - Seamless integration dengan Solana Mobile apps
+- 🔄 **Multi-Account Support** - Manage multiple accounts securely
+
+### Seed Vault vs Regular Key Storage
+
+| Feature | Seed Vault | Regular Storage |
+|---------|-----------|-----------------|
+| Security | Hardware-backed TEE | Software encryption |
+| Key Exposure | Never exposed | Can be extracted |
+| Biometric Auth | Native support | Manual implementation |
+| Backup | Secure backup | Manual backup |
+| Attack Resistance | High (hardware) | Medium (software) |
+
+### Architecture
+
+```
+┌─────────────────────────────────────────┐
+│           Mobile dApp                   │
+│  ┌───────────────────────────────────┐  │
+│  │   Mobile Wallet Adapter (MWA)     │  │
+│  └───────────────┬───────────────────┘  │
+└──────────────────┼──────────────────────┘
+                   │
+┌──────────────────▼──────────────────────┐
+│         Wallet App (Solflare, etc)      │
+│  ┌───────────────────────────────────┐  │
+│  │      Seed Vault SDK               │  │
+│  └───────────────┬───────────────────┘  │
+└──────────────────┼──────────────────────┘
+                   │
+┌──────────────────▼──────────────────────┐
+│          Seed Vault Service             │
+│  ┌───────────────────────────────────┐  │
+│  │   Hardware Security Module (TEE)  │  │
+│  │   - Private Keys                  │  │
+│  │   - Seed Phrases                  │  │
+│  │   - Signing Operations            │  │
+│  └───────────────────────────────────┘  │
+└─────────────────────────────────────────┘
+```
+
+### For Wallet Developers
+
+#### Install Seed Vault SDK
+
+```gradle
+dependencies {
+    implementation 'com.solanamobile:seedvault-wallet-sdk:0.4.0'
+}
+```
+
+#### Initialize Seed Vault
+
+```kotlin
+import com.solanamobile.seedvault.WalletContractV1
+
+class MyWalletApp : Application() {
+    private lateinit var seedVault: WalletContractV1
+    
+    override fun onCreate() {
+        super.onCreate()
+        
+        // Initialize Seed Vault
+        seedVault = WalletContractV1.getInstance(this)
+    }
+}
+```
+
+#### Create New Account
+
+```kotlin
+import com.solanamobile.seedvault.WalletContractV1
+
+suspend fun createAccount(): PublicKey {
+    val result = seedVault.createSeed(
+        purpose = WalletContractV1.PURPOSE_SIGN_SOLANA_TRANSACTION
+    )
+    
+    when (result) {
+        is WalletContractV1.CreateSeedResult.Success -> {
+            val authToken = result.authToken
+            val publicKey = result.publicKey
+            
+            // Store auth token securely
+            saveAuthToken(authToken)
+            
+            return publicKey
+        }
+        is WalletContractV1.CreateSeedResult.UserCancelled -> {
+            throw Exception("User cancelled seed creation")
+        }
+        is WalletContractV1.CreateSeedResult.Error -> {
+            throw Exception("Seed creation failed: ${result.message}")
+        }
+    }
+}
+```
+
+#### Sign Transaction
+
+```kotlin
+suspend fun signTransaction(
+    transaction: Transaction,
+    authToken: Long
+): ByteArray {
+    val message = transaction.serializeMessage()
+    
+    val result = seedVault.signTransaction(
+        message = message,
+        authToken = authToken
+    )
+    
+    when (result) {
+        is WalletContractV1.SignTransactionResult.Success -> {
+            return result.signature
+        }
+        is WalletContractV1.SignTransactionResult.UserCancelled -> {
+            throw Exception("User cancelled signing")
+        }
+        is WalletContractV1.SignTransactionResult.AuthorizationNotValid -> {
+            throw Exception("Auth token expired, re-authenticate")
+        }
+        is WalletContractV1.SignTransactionResult.Error -> {
+            throw Exception("Signing failed: ${result.message}")
+        }
+    }
+}
+```
+
+#### Sign Message
+
+```kotlin
+suspend fun signMessage(
+    message: ByteArray,
+    authToken: Long
+): ByteArray {
+    val result = seedVault.signMessage(
+        message = message,
+        authToken = authToken
+    )
+    
+    when (result) {
+        is WalletContractV1.SignMessageResult.Success -> {
+            return result.signature
+        }
+        is WalletContractV1.SignMessageResult.UserCancelled -> {
+            throw Exception("User cancelled signing")
+        }
+        is WalletContractV1.SignMessageResult.AuthorizationNotValid -> {
+            throw Exception("Auth token expired")
+        }
+        is WalletContractV1.SignMessageResult.Error -> {
+            throw Exception("Signing failed: ${result.message}")
+        }
+    }
+}
+```
+
+#### Get Public Keys
+
+```kotlin
+suspend fun getPublicKeys(): List<PublicKey> {
+    val result = seedVault.getAccounts()
+    
+    when (result) {
+        is WalletContractV1.GetAccountsResult.Success -> {
+            return result.accounts.map { it.publicKey }
+        }
+        is WalletContractV1.GetAccountsResult.Error -> {
+            throw Exception("Failed to get accounts: ${result.message}")
+        }
+    }
+}
+```
+
+### For dApp Developers
+
+dApp developers **tidak perlu** directly interact dengan Seed Vault. Semua interactions handled by:
+1. **Mobile Wallet Adapter (MWA)** - dApp communicates dengan wallet
+2. **Wallet App** - Wallet uses Seed Vault SDK untuk secure operations
+
+```tsx
+// dApp code - MWA handles Seed Vault automatically
+import { transact } from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
+
+// This automatically uses Seed Vault through the wallet
+const signature = await transact(async (wallet) => {
+  const authResult = await wallet.authorize({
+    cluster: 'solana:mainnet',
+    identity: APP_IDENTITY,
+  });
+  
+  // Wallet uses Seed Vault to sign
+  const result = await wallet.signAndSendTransactions({
+    transactions: [transaction],
+  });
+  
+  return result[0];
+});
+```
+
+### Seed Vault Simulator
+
+Untuk testing dan development, gunakan **Seed Vault Simulator**:
+
+```bash
+# Clone repository
+git clone https://github.com/solana-mobile/seed-vault-sdk.git
+
+# Open SeedVaultSimulator in Android Studio
+cd seed-vault-sdk/SeedVaultSimulator
+
+# Build and install on device/emulator
+./gradlew installDebug
+```
+
+⚠️ **WARNING**: Seed Vault Simulator adalah **development tool only**. Never use dengan real funds atau production accounts!
+
+**Simulator Features:**
+- ✅ Simulates Seed Vault API
+- ✅ No hardware security (software only)
+- ✅ Perfect untuk testing wallet integration
+- ❌ NOT secure for production use
+
+### Security Best Practices
+
+#### 1. Auth Token Management
+
+```kotlin
+// Store auth tokens securely
+import androidx.security.crypto.EncryptedSharedPreferences
+
+fun saveAuthToken(authToken: Long) {
+    val encryptedPrefs = EncryptedSharedPreferences.create(
+        context,
+        "secure_prefs",
+        masterKey,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
+    
+    encryptedPrefs.edit()
+        .putLong("auth_token", authToken)
+        .apply()
+}
+```
+
+#### 2. Handle Auth Token Expiration
+
+```kotlin
+suspend fun signWithRetry(
+    transaction: Transaction,
+    authToken: Long
+): ByteArray {
+    try {
+        return signTransaction(transaction, authToken)
+    } catch (e: Exception) {
+        if (e.message?.contains("Auth token expired") == true) {
+            // Re-authenticate user
+            val newAuthToken = reAuthenticate()
+            return signTransaction(transaction, newAuthToken)
+        }
+        throw e
+    }
+}
+```
+
+#### 3. Validate User Intent
+
+```kotlin
+// Always show transaction details before signing
+fun showTransactionPreview(transaction: Transaction) {
+    AlertDialog.Builder(context)
+        .setTitle("Confirm Transaction")
+        .setMessage("""
+            To: ${transaction.recipient}
+            Amount: ${transaction.amount} SOL
+            Fee: ${transaction.fee} SOL
+        """.trimIndent())
+        .setPositiveButton("Sign") { _, _ ->
+            signTransaction(transaction, authToken)
+        }
+        .setNegativeButton("Cancel", null)
+        .show()
+}
+```
+
+#### 4. Secure Backup
+
+```kotlin
+// Implement secure seed phrase backup
+suspend fun backupSeedPhrase(authToken: Long) {
+    val result = seedVault.exportSeed(authToken)
+    
+    when (result) {
+        is WalletContractV1.ExportSeedResult.Success -> {
+            // Show seed phrase to user for manual backup
+            // NEVER store seed phrase in plaintext
+            showSeedPhraseBackupUI(result.seedPhrase)
+        }
+        else -> {
+            throw Exception("Backup failed")
+        }
+    }
+}
+```
+
+### Seed Vault vs Seed Vault Wallet
+
+**Seed Vault** (System Service):
+- Hardware-backed secure storage
+- Part of Solana Mobile OS
+- Provides APIs untuk wallet apps
+- Manages keys securely
+
+**Seed Vault Wallet** (Reference Wallet):
+- Example wallet implementation
+- Uses Seed Vault SDK
+- Demonstrates best practices
+- Open source reference
+
+### Resources
+
+- **Seed Vault SDK**: https://github.com/solana-mobile/seed-vault-sdk
+- **Integration Guide**: https://github.com/solana-mobile/seed-vault-sdk/blob/main/docs/integration_guide.md
+- **JavaDoc**: https://solana-mobile.github.io/seed-vault-sdk/seedvault/javadoc/
+- **Discord**: https://discord.gg/solanamobile
+
+---
+
 ## Detecting Seeker Users
 
 ### Overview
