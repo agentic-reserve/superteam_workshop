@@ -335,11 +335,26 @@ const signature = await transact(async (wallet: Web3MobileWallet) => {
 
 ## Testing Your App
 
-### Install Development Wallet
+### Test with Any Android Device
 
-**Mock MWA Wallet:**
+Seeker adalah Android phone biasa. Untuk 99% development dan testing, kamu bisa menggunakan:
+- ✅ Any Android device (Samsung, Pixel, dll)
+- ✅ Android emulator dari Android Studio
+- ✅ Any standard Android API
+
+App kamu akan behave sama di Seeker seperti di Android device lainnya.
+
+### Install Mock MWA Wallet (Recommended)
+
+**Mock MWA Wallet** adalah testing wallet yang simulate Seed Vault Wallet functionality dengan features:
+- ✅ Mobile Wallet Adapter support (`authorize`, `signIn`, `signAndSendTransactions`, `signMessage`)
+- ✅ Apple Pay-like transaction signing (bottom sheet approval, no app switch)
+- ✅ Biometric authentication
+- ✅ Configurable Ed25519 private key importing
+
+**Install Mock MWA Wallet:**
 ```bash
-# Clone mock wallet
+# Clone repository
 git clone https://github.com/solana-mobile/mock-mwa-wallet.git
 
 # Open in Android Studio
@@ -450,6 +465,347 @@ export function BalanceDisplay() {
   return <Text>Balance: {balance.toFixed(4)} SOL</Text>;
 }
 ```
+
+## Detecting Seeker Users
+
+### Overview
+
+Ada 2 metode utama untuk identify Seeker users:
+
+1. **Platform Constants Check** - Lightweight client-side check
+2. **Seeker Genesis Token Verification** - Secure on-chain verification
+
+### Method 1: Platform Constants Check
+
+Platform Constants method menggunakan React Native's built-in Platform API. Quick dan lightweight, cocok untuk UI treatments dan non-critical features.
+
+⚠️ **SECURITY WARNING**: Platform Constants API bisa di-spoof dan **TIDAK boleh** digunakan untuk use cases yang memerlukan guaranteed Seeker user. Untuk guarantee, gunakan Method 2.
+
+**Check Platform Constants:**
+
+```tsx
+import { Platform } from 'react-native';
+
+const isSeekerDevice = (): boolean => {
+  return Platform.constants.Model === 'Seeker';
+};
+
+// Usage
+if (isSeekerDevice()) {
+  console.log('Running on Seeker device!');
+}
+```
+
+**Platform Constants Output di Seeker:**
+
+```json
+{
+  "uiMode": "normal",
+  "reactNativeVersion": {
+    "minor": 79,
+    "prerelease": null,
+    "major": 0,
+    "patch": 5
+  },
+  "isTesting": false,
+  "ServerHost": "localhost:8081",
+  "Brand": "solanamobile",
+  "Manufacturer": "Solana Mobile Inc.",
+  "Release": "15",
+  "Fingerprint": "solanamobile/seeker/seeker:15/AP3A.250103.524.A2/mp1V912:userdebug/release-keys",
+  "Serial": "unknown",
+  "Model": "Seeker",
+  "Version": 35
+}
+```
+
+**Use Cases:**
+- ✅ UI Treatments (special welcome messages, themes, layouts)
+- ✅ Feature Flags (enable/disable features by device type)
+- ✅ Analytics (track usage patterns)
+- ✅ Marketing (device-specific promotional content)
+
+**Limitations:**
+- ❌ Spoofable - rooted devices atau modified apps bisa change Platform constants
+
+### Method 2: Seeker Genesis Token Verification
+
+Untuk use cases yang memerlukan **guarantee** bahwa user adalah Seeker owner, verify bahwa wallet contains **Seeker Genesis Token (SGT)**.
+
+**Apa itu Seeker Genesis Token?**
+
+SGT adalah unique NFT yang:
+- ✅ Minted **once per Seeker device**
+- ✅ Represents verified ownership of Seeker
+- ✅ Implements Token Extensions (Token-2022)
+- ✅ Can only be transferred between user's wallet accounts in Seed Vault
+
+**Key Addresses:**
+- Mint Authority: `GT2zuHVaZQYZSyQMgJPLzvkmyztfyXg2NJunqFp4p3A4`
+- Metadata Address: `GT22s89nU4iWFkNXj1Bw6uYhJJWDRPpShHt4Bk8f99Te`
+- Group Address: `GT22s89nU4iWFkNXj1Bw6uYhJJWDRPpShHt4Bk8f99Te`
+
+### Genesis Token Verification Process
+
+Verification process ada **2 main steps**:
+
+#### Step 1: Prove Wallet Ownership dengan SIWS
+
+**Client-side: Sign SIWS Payload**
+
+```tsx
+import { transact } from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
+
+const APP_IDENTITY = {
+  name: 'Your React Native dApp',
+  uri: 'https://yourdapp.com',
+  icon: 'favicon.ico',
+};
+
+async function signSIWSPayload() {
+  const result = await transact(async (wallet) => {
+    const authorizationResult = await wallet.authorize({
+      cluster: 'solana:mainnet',
+      identity: APP_IDENTITY,
+      sign_in_payload: {
+        domain: 'yourdapp.com',
+        statement: 'Sign in to verify Seeker ownership',
+        uri: 'https://yourdapp.com',
+      },
+    });
+
+    return {
+      walletAddress: authorizationResult.accounts[0].address,
+      signInResult: authorizationResult.sign_in_result,
+    };
+  });
+
+  return result;
+}
+```
+
+**Server-side: Verify SIWS Signature**
+
+```tsx
+// Backend server
+import { verifySignIn } from "@solana/wallet-standard-util";
+
+async function verifySIWS(signInPayload, signInResult): Promise<boolean> {
+  const serialisedOutput = {
+    account: {
+      publicKey: new Uint8Array(signInResult.account.publicKey),
+      ...signInResult.account,
+    },
+    signature: new Uint8Array(signInResult.signature),
+    signedMessage: new Uint8Array(signInResult.signedMessage),
+  };
+
+  // Verify signature against original payload
+  return verifySignIn(signInPayload, serialisedOutput);
+}
+```
+
+#### Step 2: Check SGT Ownership
+
+**Server-side: Query RPC untuk Verify SGT**
+
+```tsx
+// Backend server
+const { Connection, PublicKey } = require('@solana/web3.js');
+const { 
+  unpackMint, 
+  getMetadataPointerState, 
+  getTokenGroupMemberState, 
+  TOKEN_2022_PROGRAM_ID 
+} = require('@solana/spl-token');
+
+async function checkWalletForSGT(walletAddress: string): Promise<boolean> {
+  const HELIUS_RPC_URL = `https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
+  const SGT_MINT_AUTHORITY = 'GT2zuHVaZQYZSyQMgJPLzvkmyztfyXg2NJunqFp4p3A4';
+  const SGT_METADATA_ADDRESS = 'GT22s89nU4iWFkNXj1Bw6uYhJJWDRPpShHt4Bk8f99Te';
+  const SGT_GROUP_MINT_ADDRESS = 'GT22s89nU4iWFkNXj1Bw6uYhJJWDRPpShHt4Bk8f99Te';
+
+  try {
+    const connection = new Connection(HELIUS_RPC_URL);
+
+    // Use getTokenAccountsByOwnerV2 with pagination
+    let allTokenAccounts = [];
+    let paginationKey = null;
+    let pageCount = 0;
+
+    do {
+      pageCount++;
+      const requestPayload = {
+        jsonrpc: '2.0',
+        id: `page-${pageCount}`,
+        method: 'getTokenAccountsByOwnerV2',
+        params: [
+          walletAddress,
+          { "programId": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb" },
+          {
+            encoding: 'jsonParsed',
+            limit: 1000,
+            ...(paginationKey && { paginationKey })
+          }
+        ]
+      };
+
+      const response = await fetch(HELIUS_RPC_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestPayload)
+      });
+
+      const data = await response.json();
+      const pageResults = data.result?.value.accounts || [];
+      
+      if (pageResults.length > 0) {
+        allTokenAccounts.push(...pageResults);
+      }
+
+      paginationKey = data.result?.paginationKey;
+    } while (paginationKey);
+
+    if (allTokenAccounts.length === 0) {
+      return false;
+    }
+
+    // Extract mint addresses
+    const mintPubkeys = allTokenAccounts
+      .map((accountInfo) => {
+        try {
+          if (accountInfo?.account?.data?.parsed?.info?.mint) {
+            return new PublicKey(accountInfo.account.data.parsed.info.mint);
+          }
+          return null;
+        } catch (error) {
+          return null;
+        }
+      })
+      .filter((mintPubkey) => mintPubkey !== null);
+
+    // Fetch mint account data in batches
+    const BATCH_SIZE = 100;
+    const mintAccountInfos = [];
+    
+    for (let i = 0; i < mintPubkeys.length; i += BATCH_SIZE) {
+      const batch = mintPubkeys.slice(i, i + BATCH_SIZE);
+      const batchResults = await connection.getMultipleAccountsInfo(batch);
+      mintAccountInfos.push(...batchResults);
+    }
+
+    // Check each mint for SGT verification
+    for (let i = 0; i < mintAccountInfos.length; i++) {
+      const mintInfo = mintAccountInfos[i];
+      
+      if (mintInfo) {
+        const mintPubkey = mintPubkeys[i];
+        
+        try {
+          // Unpack mint account data
+          const mint = unpackMint(mintPubkey, mintInfo, TOKEN_2022_PROGRAM_ID);
+          const mintAuthority = mint.mintAuthority?.toBase58();
+          const hasCorrectMintAuthority = mintAuthority === SGT_MINT_AUTHORITY;
+
+          // Check SGT Metadata
+          const metadataPointer = getMetadataPointerState(mint);
+          const hasCorrectMetadata = metadataPointer &&
+            metadataPointer.authority?.toBase58() === SGT_MINT_AUTHORITY &&
+            metadataPointer.metadataAddress?.toBase58() === SGT_METADATA_ADDRESS;
+
+          // Check SGT Group Member
+          const tokenGroupMemberState = getTokenGroupMemberState(mint);
+          const hasCorrectGroupMember = tokenGroupMemberState &&
+            tokenGroupMemberState.group?.toBase58() === SGT_GROUP_MINT_ADDRESS;
+
+          // If all match, it's a verified SGT
+          if (hasCorrectMintAuthority && hasCorrectMetadata && hasCorrectGroupMember) {
+            console.log(`VERIFIED SGT FOUND: ${mint.address.toBase58()}`);
+            return true;
+          }
+        } catch (mintError) {
+          continue;
+        }
+      }
+    }
+
+    return false;
+  } catch (error) {
+    console.error("Error verifying SGT ownership:", error.message);
+    return false;
+  }
+}
+```
+
+#### Step 3: Combine SIWS + SGT Check
+
+```tsx
+// Backend server
+async function verifySeekerUser(signInResult) {
+  // Verify SIWS signature
+  const siwsVerified = await verifySIWS(signInResult);
+
+  // Check SGT ownership
+  const hasSGT = await checkWalletForSGT(signInResult.walletAddress);
+
+  // Both must be true for verified Seeker owner
+  return siwsVerified && hasSGT;
+}
+```
+
+### SGT Transferability & Anti-Sybil
+
+⚠️ **IMPORTANT**: SGTs are transferrable between user's wallet accounts, so you **must verify uniqueness** by checking the SGT's **unique mint address**.
+
+**Anti-Sybil Example: In-App Rewards Claim**
+
+Untuk limit rewards claim to once per Seeker device:
+
+```tsx
+// Backend server
+const claimedSGTMints = new Set(); // Store claimed mint addresses
+
+async function claimReward(walletAddress: string) {
+  // 1. Verify wallet ownership via SIWS
+  const siwsVerified = await verifySIWS(signInResult);
+  if (!siwsVerified) {
+    throw new Error('SIWS verification failed');
+  }
+
+  // 2. Check wallet owns SGT
+  const sgtMintAddress = await getSGTMintAddress(walletAddress);
+  if (!sgtMintAddress) {
+    throw new Error('No SGT found in wallet');
+  }
+
+  // 3. Check SGT mint hasn't been used before
+  if (claimedSGTMints.has(sgtMintAddress)) {
+    throw new Error('This SGT has already claimed rewards');
+  }
+
+  // Grant reward and mark SGT as used
+  await grantReward(walletAddress);
+  claimedSGTMints.add(sgtMintAddress);
+  
+  return { success: true };
+}
+```
+
+### Use Cases
+
+**Platform Constants (Method 1):**
+- ✅ UI treatments dan themes
+- ✅ Feature flags
+- ✅ Analytics tracking
+- ✅ Marketing content
+
+**SGT Verification (Method 2):**
+- ✅ Gated content (restrict features to verified Seeker users)
+- ✅ Rewards programs (exclusive rewards for Seeker owners)
+- ✅ Anti-Sybil measures (prevent multiple claims per device)
+- ✅ Access control (premium features for Seeker users)
+
+---
 
 ## Best Practices
 
